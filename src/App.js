@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 
 
+const ACTIONS = {
+  INCREMENT: 'increment',
+  DECREMENT: 'decrement'
+}
+
+function reducer(state, action) {
+  switch(action.type) {
+    case ACTIONS.INCREMENT:
+      return { count: state.count + 1}
+    case ACTIONS.DECREMENT:
+      return { count: state.count - 1}
+    default:
+      return state
+  }
+}
 
 function App() {
-  const [count, setCount] = useState(4)
-  const [theme, setTheme] = useState('blue')
+  const [state, dispatch] = useReducer(reducer, {count : 0 })
   // Return an array of values. First value(count) will be state(current state). Second (setCount) is a function which is going to 
   // allow us to update our state. 
 
   function decrementCount() {
-    setCount(prevCount => prevCount - 1)
-    setTheme('green')
+    dispatch( {type: ACTIONS.DECREMENT})
     // Use a function component to update previous state. Don't use count because it's not the optimal way. 
     // Using Functions is optimal
   }
 
   function incrementCount() {
-    setCount(prevCount => prevCount + 1)
-    setTheme('red')
+    dispatch({type: ACTIONS.INCREMENT})
   }
 
   return (
     <>
       <button onClick={decrementCount}>-</button>
-      <span>{count}</span>
-      <span>{theme}</span>
+      <span>{state.count}</span>
       <button onClick={incrementCount}>+</button>
     </>
   );
